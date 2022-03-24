@@ -3,17 +3,17 @@ pipeline {
   stages {
     stage ("Checkout") {
       steps {
-      sh "git clone https://github.com/Dileep-HL/hello-world-war"
+      echo "Step1: Testing of sequential exixution"
       }
     }
     stage ("Build") {
       steps {
-      sh "mvn clean package"
+       echo "Step2: Testing of sequential exixution"
       }
     }
     stage ("Deploy") {
       steps {
-      sh "sudo cp /home/slave-1/jenkins/workspace/Jenkin_pipeline/target/hello-world-war-1.0.0.war /opt/apache-tomcat-9.0.60/webapps"
+        echo "Step3: Testing of sequential exixution"
       }
     }
     
