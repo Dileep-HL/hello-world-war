@@ -1,21 +1,34 @@
-pipeline {
- agent { label 'java' }
-  stages {
-    stage ("Checkout") {
-      steps {
-      sh "git clone https://github.com/Dileep-HL/hello-world-war"
+pipeline{
+      agent { label 'slave1' }
+      stages{
+      stage('check out'){
+                  steps{
+                  sh "rm -rf hello-world-war"
+                  sh "git clone https://github.com/sandy1791994/hello-world-war.git"
+                  }
+                  }
+      stage('build'){
+      steps{
+      sh "pwd"
+      sh "ls"
+      sh "cd hello-world-war"
+      sh "docker build -t sandy1791994/docwarimage:1.0 ."
       }
-    }
-    stage ("Build") {
-      steps {
-      sh "mvn clean package"
       }
-    }
-    stage ("Deploy") {
-      steps {
-      sh "sudo cp /home/slave-1/jenkins/workspace/JenkinMultiPipe_master/target/hello-world-war-1.0.0.war /opt/apache-tomcat-9.0.60/webapps"
+       stage('publish'){
+                  steps{
+                        sh "docker login -u sandy1791994 -p mAnj@0606g"
+                        sh "docker push sandy1791994/docwarimage:1.0"
+                  }
+            }
+            stage('deploy'){
+                  agent { label 'slave2' }
+                  steps{
+                        sh "docker login -u sandy1791994 -p mAnj@0606g"
+                        sh "docker pull sandy1791994/docwarimage:1.0"
+                        sh "docker rm -f trail1"
+                        sh "docker run -d -p 8085:8080 --name trail1 sandy1791994/docwarimage:1.0"
+                  }
+            }
       }
-    }
-    
-  }
-}
+      }
