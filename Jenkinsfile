@@ -21,6 +21,15 @@ pipeline{
                         sh "docker push  dileep288/docwarimage:1.0"
                   }
             }
+
+            stage('deploy'){
+                              steps{
+                        sh "docker login -u  dileep288 -p 1019@Lmsdin"
+                        sh "docker pull dileep288/docwarimage:1.0"
+                        sh "docker rm -f trail1"
+                        sh "docker run -d -p 8085:8080 --name trail1 dileep288/docwarimage:1.0"
+                  }
+            }
             
       }
       }
